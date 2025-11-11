@@ -1,0 +1,11 @@
+Django>=4.2
+django-tailwind
+django-webpack-loader      # optional if using webpack for assets
+djangorestframework       # plus tard pour API
+channels                  # for websockets / realtime
+channels_redis            # backend Redis pour channels
+celery[redis]
+redis
+psycopg2-binary           # postgresql
+gunicorn
+python-dotenv
