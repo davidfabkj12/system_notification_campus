@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'systeme_notification.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'nnotif_sysdb.sqlite3',
+        'NAME': BASE_DIR / 'notifsysdb.sqlite3',
     }
 }
 
@@ -121,4 +121,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-# AUTH_USER_MODEL = 'notifications.User'
+AUTH_USER_MODEL = 'notifications.User'

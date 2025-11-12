@@ -1,27 +1,24 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
-from django.utils import timezone  
+from django.utils import timezone
 from .descriptors import EmailDescriptor, PhoneDescriptor, PriorityDescriptor, TimeWindowDescriptor
 
 class User(AbstractUser):
     """
-    Modèle utilisateur étendu :
-    - Email standard Django
-    - Email perso, téléphone, priorité, fenêtre temporelle
-      avec validation via descripteurs mais stockés en base de données
+    Modèle utilisateur étendu basé sur AbstractUser :
+    - Champs ORM pour stockage réel
+    - Descripteurs pour validation / logique métier
     """
-    email = models.EmailField(unique=True, blank=False)
-    date_joined = models.DateTimeField(auto_now_add=True)
-    bio = models.TextField(blank=True, null=True)
 
-    # Champs ORM pour stocker les données
+    # Champs ORM pour base
     email_perso_db = models.EmailField(default='perso@domaine.com')
     phone_db = models.CharField(max_length=20, default='+00000000000')
     priority_db = models.CharField(max_length=10, default='LOW')
     time_window_start = models.DateTimeField(default=timezone.now)
     time_window_end = models.DateTimeField(default=timezone.now)
+    bio = models.TextField(blank=True, null=True)
 
-    # Descripteurs pour validation / logique métier
+    # Descripteurs
     email_perso = EmailDescriptor()
     phone = PhoneDescriptor()
     priority = PriorityDescriptor()
@@ -40,14 +37,12 @@ class User(AbstractUser):
     )
 
     def __init__(self, *args, **kwargs):
-        # Extraction des valeurs personnalisées pour les descripteurs
         email_val = kwargs.pop('email_perso', None)
         phone_val = kwargs.pop('phone', None)
         priority_val = kwargs.pop('priority', None)
         time_window_val = kwargs.pop('time_window', None)
         super().__init__(*args, **kwargs)
 
-        # Initialisation des descripteurs avec valeurs fournies ou défauts
         if email_val:
             self.email_perso = email_val
         if phone_val:
@@ -57,14 +52,9 @@ class User(AbstractUser):
         if time_window_val:
             self.time_window = time_window_val
         else:
-            # Valeur par défaut timezone-aware pour éviter les warnings
             self.time_window = (self.time_window_start, self.time_window_end)
 
     def save(self, *args, **kwargs):
-        """
-        Synchronisation des descripteurs avec les champs ORM avant sauvegarde.
-        Cela permet de conserver les valeurs validées en base.
-        """
         self.email_perso_db = self.email_perso
         self.phone_db = self.phone
         self.priority_db = self.priority
