@@ -12,3 +12,4 @@ urlpatterns = [
     path('evacuation/innondation/', InnondationAPIView.as_view()),
     path('evacuation/securite/', SecuriteAPIView.as_view()),
 ]
+
