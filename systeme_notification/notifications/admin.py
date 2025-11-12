@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, Notification
+from .models import User, Notification , Group
 
 # --- User Admin ---
 class UserAdmin(BaseUserAdmin):
@@ -54,3 +54,4 @@ class NotificationAdmin(admin.ModelAdmin):
 # --- Enregistrement ---
 admin.site.register(User, UserAdmin)
 admin.site.register(Notification, NotificationAdmin)
+admin.site.unregister(Group)
