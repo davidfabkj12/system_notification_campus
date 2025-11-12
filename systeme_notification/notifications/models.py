@@ -1,16 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager, Group, Permission
 from django.utils import timezone
-from .descriptors import EmailDescriptor, PhoneDescriptor, PriorityDescriptor, TimeWindowDescriptor
+from .descriptors import EmailDescriptor, PhoneDescriptor
 
+
+# ------------------------------
 # Custom User Manager
+# ------------------------------
 class CustomUserManager(BaseUserManager):
     use_in_migrations = True
 
     def create_user(self, username, email=None, password=None, **extra_fields):
-        """
-        Crée et sauvegarde un utilisateur normal.
-        """
         if not username:
             raise ValueError('Le username doit être défini')
         email = self.normalize_email(email)
@@ -20,17 +20,12 @@ class CustomUserManager(BaseUserManager):
         return user
 
     def create_superuser(self, username, email=None, password=None, **extra_fields):
-        """
-        Crée et sauvegarde un superuser.
-        Remplit automatiquement les champs personnalisés obligatoires.
-        """
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
-        # Champs personnalisés
+        # Champs personnalisés par défaut
         extra_fields.setdefault('phone', '+0000000000')
         extra_fields.setdefault('email_perso', 'perso@domaine.com')
-        extra_fields.setdefault('priority', 'HIGH')
 
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True.')
@@ -40,28 +35,25 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(username, email, password, **extra_fields)
 
 
+# ------------------------------
 # Custom User
+# ------------------------------
 class User(AbstractUser):
     """
-    Modèle utilisateur étendu basé sur AbstractUser :
-    - Champs ORM pour stockage réel
-    - Descripteurs pour validation / logique métier
+    Modèle utilisateur étendu basé sur AbstractUser.
+    On retire priority et time_window, ils seront gérés via Notification.
     """
 
-    # Champs ORM pour base
+    # Champs ORM pour stockage réel
     phone_db = models.CharField(max_length=20, default='+0000000000', blank=True)
     email_perso_db = models.EmailField(default='perso@domaine.com', blank=True)
-    priority_db = models.CharField(max_length=10, default='LOW', blank=True)
+    bio = models.TextField(blank=True, null=True)
     time_window_start = models.DateTimeField(default=timezone.now)
     time_window_end = models.DateTimeField(default=timezone.now)
 
-    bio = models.TextField(blank=True, null=True)
-
-    # Descripteurs pour logique métier
+    # Descripteurs restants pour validation
     email_perso = EmailDescriptor()
     phone = PhoneDescriptor()
-    priority = PriorityDescriptor()
-    time_window = TimeWindowDescriptor()
 
     # Relations ManyToMany pour groupes et permissions
     groups = models.ManyToManyField(
@@ -81,27 +73,17 @@ class User(AbstractUser):
     def __init__(self, *args, **kwargs):
         email_val = kwargs.pop('email_perso', None)
         phone_val = kwargs.pop('phone', None)
-        priority_val = kwargs.pop('priority', None)
-        time_window_val = kwargs.pop('time_window', None)
         super().__init__(*args, **kwargs)
 
         if email_val:
             self.email_perso = email_val
         if phone_val:
             self.phone = phone_val
-        if priority_val:
-            self.priority = priority_val
-        if time_window_val:
-            self.time_window = time_window_val
-        else:
-            self.time_window = (self.time_window_start, self.time_window_end)
 
     def save(self, *args, **kwargs):
         # Synchronisation des champs ORM avec les descripteurs
         self.email_perso_db = self.email_perso
         self.phone_db = self.phone
-        self.priority_db = self.priority
-        self.time_window_start, self.time_window_end = self.time_window
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -112,11 +94,27 @@ class User(AbstractUser):
         verbose_name_plural = "Utilisateurs"
 
 
+# ------------------------------
 # Modèle Notification
+# ------------------------------
 class Notification(models.Model):
     message = models.TextField()
     destinataire = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+    # Champs hérités automatiquement depuis l’utilisateur
+    priority = models.CharField(max_length=10, default='LOW')
+    time_window_start = models.DateTimeField(null=True, blank=True)
+    time_window_end = models.DateTimeField(null=True, blank=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def save(self, *args, **kwargs):
+        if self.destinataire:
+            # Copier priority et time_window depuis l'utilisateur
+            self.priority = getattr(self.destinataire, 'priority', 'LOW')
+            self.time_window_start = self.destinataire.time_window_start
+            self.time_window_end = self.destinataire.time_window_end
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f"Notification to {self.destinataire} : {self.message[:30]}"
+        return f"Notification to {self.destinataire} [{self.priority}] : {self.message[:30]}"
