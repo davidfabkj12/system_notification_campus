@@ -35,7 +35,6 @@ class TimeWindowDescriptor:
         return instance.__dict__.get('time_window')
 
     def __set__(self, instance, value):
-        # Exemple simple: tuple (start, end)
         if not isinstance(value, tuple) or len(value) != 2:
-            raise ValueError("Time window invalide, attendre un tuple (start, end)")
+            raise ValueError("Time window invalide")
         instance.__dict__['time_window'] = value

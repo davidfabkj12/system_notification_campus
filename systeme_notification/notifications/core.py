@@ -27,7 +27,7 @@ class NotificationMixin:
 
 # Classe de base pour les urgences
 class Urgence:
-    time_window = TimeWindowDescriptor()  # Validation de la plage horaire
+    time_window = TimeWindowDescriptor()
 
     def evacuer(self):
         print("Évacuation générique...")

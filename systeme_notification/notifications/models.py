@@ -4,9 +4,7 @@ from django.utils import timezone
 from .descriptors import EmailDescriptor, PhoneDescriptor
 
 
-# ------------------------------
 # Custom User Manager
-# ------------------------------
 class CustomUserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -35,9 +33,8 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(username, email, password, **extra_fields)
 
 
-# ------------------------------
+
 # Custom User
-# ------------------------------
 class User(AbstractUser):
     """
     Modèle utilisateur étendu basé sur AbstractUser.
@@ -94,9 +91,7 @@ class User(AbstractUser):
         verbose_name_plural = "Utilisateurs"
 
 
-# ------------------------------
 # Modèle Notification
-# ------------------------------
 class Notification(models.Model):
     message = models.TextField()
     destinataire = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
