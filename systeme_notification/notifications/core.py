@@ -1,8 +1,13 @@
-from abc import ABC, abstractmethod
-from .decorators import *
-from .metaclasses import NotificationMeta
+from .decorators import (
+    AddPerformanceTracking,
+    AutoConfigurationValidation,
+    RegisterInGlobalRegistry,
+    AddCircuitBreaker,
+    message
+)
+from .descriptors import TimeWindowDescriptor
 
-# Mixins
+# Mixins pour fonctionnalités transverses
 class AlarmMixin:
     @message
     def set_alarm(self):
@@ -20,103 +25,19 @@ class NotificationMixin:
         print(notif)
         return notif
 
-# # Classe abstraite
-# class Urgence(ABC):
-#     @abstractmethod
-#     def evacuer(self):
-#         pass
-
-#     def set_off_alarm(self):
-#         print("Alarme désactivée")
-
-# # Sous-classes urgences avec validation corrigée
-# @add_performance_tracking
-# @auto_configuration_validation   # le décorateur valide maintenant après __init__
-# @register_in_global_registry
-# @add_circuit_breaker
-# class Epidemie(Urgence, AlarmMixin, SpeakerMixin, NotificationMixin, metaclass=NotificationMeta):
-#     required_fields = ['nom']
-    
-#     def __init__(self, nom="Epidemie"):
-#         self.nom = nom
-
-#     def evacuer(self):
-#         print(f"Evacuation : {self.nom}")
-#         self.set_alarm()
-#         self.speaker()
-#         self.send_notifications("Portez un masque", destinataire=None)
-
-# @add_performance_tracking
-# @auto_configuration_validation
-# @register_in_global_registry
-# @add_circuit_breaker
-# class Incendie(Urgence, AlarmMixin, SpeakerMixin, NotificationMixin, metaclass=NotificationMeta):
-#     required_fields = ['nom']
-
-#     def __init__(self, nom="Incendie"):
-#         self.nom = nom
-
-#     def evacuer(self):
-#         print(f"Evacuation : {self.nom}")
-#         self.set_alarm()
-#         self.speaker()
-#         self.send_notifications("Evacuez immédiatement", destinataire=None)
-
-# @add_performance_tracking
-# @auto_configuration_validation
-# @register_in_global_registry
-# @add_circuit_breaker
-# class Innondation(Urgence, AlarmMixin, SpeakerMixin, NotificationMixin, metaclass=NotificationMeta):
-#     required_fields = ['nom']
-
-#     def __init__(self, nom="Innondation"):
-#         self.nom = nom
-
-#     def evacuer(self):
-#         print(f"Evacuation : {self.nom}")
-#         self.set_alarm()
-#         self.speaker()
-#         self.send_notifications("Montez à l'étage", destinataire=None)
-
-# @add_performance_tracking
-# @auto_configuration_validation
-# @register_in_global_registry
-# @add_circuit_breaker
-# class Securite(Urgence, AlarmMixin, SpeakerMixin, NotificationMixin, metaclass=NotificationMeta):
-#     required_fields = ['nom']
-
-#     def __init__(self, nom="Securite"):
-#         self.nom = nom
-
-#     def evacuer(self):
-#         print(f"Evacuation : {self.nom}")
-#         self.set_alarm()
-#         self.speaker()
-#         self.send_notifications("Suivez les consignes de sécurité", destinataire=None)
-
-
-from .decorators import (
-    AddPerformanceTracking,
-    AutoConfigurationValidation,
-    RegisterInGlobalRegistry,
-    AddCircuitBreaker,
-    message
-)
-from .descriptors import TimeWindowDescriptor
-
-
+# Classe de base pour les urgences
 class Urgence:
-    time_window = TimeWindowDescriptor()
+    time_window = TimeWindowDescriptor()  # Validation de la plage horaire
 
     def evacuer(self):
         print("Évacuation générique...")
 
-
+# Exemple de sous-classe Epidemie avec tous les décorateurs appliqués
 @AddPerformanceTracking()
 @AutoConfigurationValidation()
 @RegisterInGlobalRegistry()
 @AddCircuitBreaker()
-class Epidemie(Urgence):
+class Epidemie(Urgence, AlarmMixin, SpeakerMixin, NotificationMixin):
     required_fields = ['nom']
 
     def __init__(self, nom="Epidemie"):
@@ -125,3 +46,58 @@ class Epidemie(Urgence):
     @message
     def evacuer(self):
         print(f"Évacuation à cause de {self.nom}")
+        self.set_alarm()
+        self.speaker()
+        self.send_notifications("Portez un masque")
+
+# Autres urgences possibles
+@AddPerformanceTracking()
+@AutoConfigurationValidation()
+@RegisterInGlobalRegistry()
+@AddCircuitBreaker()
+class Incendie(Urgence, AlarmMixin, SpeakerMixin, NotificationMixin):
+    required_fields = ['nom']
+
+    def __init__(self, nom="Incendie"):
+        self.nom = nom
+
+    @message
+    def evacuer(self):
+        print(f"Évacuation à cause de {self.nom}")
+        self.set_alarm()
+        self.speaker()
+        self.send_notifications("Evacuez immédiatement")
+
+@AddPerformanceTracking()
+@AutoConfigurationValidation()
+@RegisterInGlobalRegistry()
+@AddCircuitBreaker()
+class Innondation(Urgence, AlarmMixin, SpeakerMixin, NotificationMixin):
+    required_fields = ['nom']
+
+    def __init__(self, nom="Innondation"):
+        self.nom = nom
+
+    @message
+    def evacuer(self):
+        print(f"Évacuation à cause de {self.nom}")
+        self.set_alarm()
+        self.speaker()
+        self.send_notifications("Montez à l'étage")
+
+@AddPerformanceTracking()
+@AutoConfigurationValidation()
+@RegisterInGlobalRegistry()
+@AddCircuitBreaker()
+class Securite(Urgence, AlarmMixin, SpeakerMixin, NotificationMixin):
+    required_fields = ['nom']
+
+    def __init__(self, nom="Securite"):
+        self.nom = nom
+
+    @message
+    def evacuer(self):
+        print(f"Évacuation à cause de {self.nom}")
+        self.set_alarm()
+        self.speaker()
+        self.send_notifications("Suivez les consignes de sécurité")

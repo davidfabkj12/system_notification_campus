@@ -1,71 +1,75 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
-from .descriptors import (
-    EmailDescriptor,
-    PhoneDescriptor,
-    PriorityDescriptor,
-    TimeWindowDescriptor
-)
-from datetime import datetime
+from django.utils import timezone  
+from .descriptors import EmailDescriptor, PhoneDescriptor, PriorityDescriptor, TimeWindowDescriptor
 
-
-
-#utilisateur personnalise 
 class User(AbstractUser):
     """
     Modèle utilisateur étendu :
-    - Conserve l'email standard Django (champ 'email')
-    - Ajoute un email_perso avec un descripteur de validation personnalisé
-    - Ajoute un numéro de téléphone et un niveau de priorité (POO)
-    - Ajoute une fenêtre temporelle (TimeWindowDescriptor)
+    - Email standard Django
+    - Email perso, téléphone, priorité, fenêtre temporelle
+      avec validation via descripteurs mais stockés en base de données
     """
-
-    # Champs ORM Django natifs
     email = models.EmailField(unique=True, blank=False)
     date_joined = models.DateTimeField(auto_now_add=True)
+    bio = models.TextField(blank=True, null=True)
 
-    # Champs additionnels via ORM (stockés en base)
-    bio = models.TextField(blank=True, null=True, help_text="Courte biographie optionnelle")
+    # Champs ORM pour stocker les données
+    email_perso_db = models.EmailField(default='perso@domaine.com')
+    phone_db = models.CharField(max_length=20, default='+00000000000')
+    priority_db = models.CharField(max_length=10, default='LOW')
+    time_window_start = models.DateTimeField(default=timezone.now)
+    time_window_end = models.DateTimeField(default=timezone.now)
 
-    # Champs logiques via descripteurs
+    # Descripteurs pour validation / logique métier
     email_perso = EmailDescriptor()
     phone = PhoneDescriptor()
-    priority = PriorityDescriptor(default='LOW')
+    priority = PriorityDescriptor()
     time_window = TimeWindowDescriptor()
 
-    # Groupes et permissions (pour éviter le conflit avec auth.User)
+    # Relations ManyToMany
     groups = models.ManyToManyField(
         Group,
         related_name="custom_user_groups",
-        blank=True,
-        help_text="Groupes d'appartenance",
-        verbose_name="groupes"
+        blank=True
     )
-
     user_permissions = models.ManyToManyField(
         Permission,
         related_name="custom_user_permissions",
-        blank=True,
-        help_text="Permissions spécifiques de cet utilisateur",
-        verbose_name="permissions utilisateur"
+        blank=True
     )
 
     def __init__(self, *args, **kwargs):
-        """
-        Initialise les valeurs par défaut des descripteurs.
-        """
+        # Extraction des valeurs personnalisées pour les descripteurs
+        email_val = kwargs.pop('email_perso', None)
+        phone_val = kwargs.pop('phone', None)
+        priority_val = kwargs.pop('priority', None)
+        time_window_val = kwargs.pop('time_window', None)
         super().__init__(*args, **kwargs)
-        if not hasattr(self, '_email_perso'):
-            self.email_perso = kwargs.get('email_perso', 'perso@domaine.com')
-        if not hasattr(self, '_phone'):
-            self.phone = kwargs.get('phone', '+00000000000')
-        if not hasattr(self, '_priority'):
-            self.priority = kwargs.get('priority', 'LOW')
-        if not hasattr(self, '_time_window'):
-            self.time_window = kwargs.get(
-                'time_window',
-                (datetime.now(), datetime.now())  # valeur temporaire
-            )
+
+        # Initialisation des descripteurs avec valeurs fournies ou défauts
+        if email_val:
+            self.email_perso = email_val
+        if phone_val:
+            self.phone = phone_val
+        if priority_val:
+            self.priority = priority_val
+        if time_window_val:
+            self.time_window = time_window_val
+        else:
+            # Valeur par défaut timezone-aware pour éviter les warnings
+            self.time_window = (self.time_window_start, self.time_window_end)
+
+    def save(self, *args, **kwargs):
+        """
+        Synchronisation des descripteurs avec les champs ORM avant sauvegarde.
+        Cela permet de conserver les valeurs validées en base.
+        """
+        self.email_perso_db = self.email_perso
+        self.phone_db = self.phone
+        self.priority_db = self.priority
+        self.time_window_start, self.time_window_end = self.time_window
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.username} ({self.email} / {self.email_perso})"
@@ -74,6 +78,7 @@ class User(AbstractUser):
         verbose_name = "Utilisateur"
         verbose_name_plural = "Utilisateurs"
 
+# Modèle Notification
 class Notification(models.Model):
     message = models.TextField()
     destinataire = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
