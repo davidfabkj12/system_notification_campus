@@ -1,22 +1,8 @@
-
 from abc import ABCMeta
-
-
-# class NotificationMeta(type):
-#     def __new__(cls, name, bases, attrs):
-#         if 'required_fields' in attrs:
-#             def validate(self):
-#                 for field in attrs['required_fields']:
-#                     if getattr(self, field, None) is None:
-#                         raise ValueError(f"Champ requis manquant: {field}")
-#             attrs['validate'] = validate
-#         global_registry[name] = cls
-#         return super().__new__(cls, name, bases, attrs)
-
 
 global_registry = {}
 
-class NotificationMeta(ABCMeta):  # <--- avant c'était type
+class NotificationMeta(ABCMeta):  
     def __new__(cls, name, bases, attrs):
         if 'required_fields' in attrs:
             def validate(self):
