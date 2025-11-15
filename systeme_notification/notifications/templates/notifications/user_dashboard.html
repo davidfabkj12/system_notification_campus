@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Utilisateur - Notifications Campus</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .user-info {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card h3 {
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .notifications-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .notifications-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .notifications-header h2 {
+            color: #333;
+            font-size: 1.5em;
+        }
+        
+        .refresh-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .refresh-btn:hover {
+            background: #5568d3;
+        }
+        
+        .notification-item {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s;
+        }
+        
+        .notification-item:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateX(5px);
+        }
+        
+        .notification-item.priority-haute {
+            border-left-color: #dc3545;
+            background: #ffe6e6;
+        }
+        
+        .notification-item.priority-moyenne {
+            border-left-color: #ffc107;
+            background: #fff8e1;
+        }
+        
+        .notification-item.priority-faible {
+            border-left-color: #28a745;
+            background: #e8f5e9;
+        }
+        
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .notification-priority {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .priority-haute {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .priority-moyenne {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .priority-faible {
+            background: #28a745;
+            color: white;
+        }
+        
+        .notification-date {
+            color: #999;
+            font-size: 0.9em;
+        }
+        
+        .notification-message {
+            color: #333;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+        
+        .no-notifications {
+            text-align: center;
+            padding: 50px;
+            color: #999;
+            font-size: 1.2em;
+        }
+        
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-left: 10px;
+            transition: background 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: #c82333;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔔 Dashboard Utilisateur</h1>
+            <div class="user-info">
+                <strong>Bienvenue, {{ user.username }}!</strong> | {{ user.email }}
+                <!-- Bouton de déconnexion accessible depuis le tableau de bord utilisateur -->
+                <a href="{% url 'login' %}" class="logout-btn">🚪 Déconnexion</a>
+            </div>
+        </div>
+        
+        <div class="stats-cards">
+            <div class="stat-card">
+                <h3>Total Notifications</h3>
+                <div class="number" id="total-notifications">{{ total_notifications }}</div>
+            </div>
+            <div class="stat-card">
+                <h3>Récentes (24h)</h3>
+                <div class="number" id="unread-notifications">{{ unread_notifications }}</div>
+            </div>
+            <div class="stat-card">
+                <h3>Haute priorité</h3>
+                <div class="number" id="high-priority">{{ high_priority }}</div>
+            </div>
+        </div>
+        
+        <div class="notifications-container">
+            <div class="notifications-header">
+                <h2>Mes Notifications</h2>
+                <div>
+                </div>
+            </div>
+            
+            <div id="notifications-list">
+                {% if notifications %}
+                    {% for notif in notifications %}
+                    <div class="notification-item priority-{{ notif.priority }}">
+                        <div class="notification-header">
+                            <span class="notification-priority priority-{{ notif.priority }}">{{ notif.priority }}</span>
+                            <span class="notification-date">{{ notif.created_at|date:"d/m/Y H:i" }}</span>
+                        </div>
+                        <div class="notification-message">
+                            {{ notif.message }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-notifications">
+                        📭 Aucune notification pour le moment
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Auto-refresh every 30 seconds
+        setTimeout(() => location.reload(), 30000);
+    </script>
+</body>
+</html>

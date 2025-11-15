@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager, Group, Permission
 from django.utils import timezone
-from .descriptors import EmailDescriptor, PhoneDescriptor
+from .descriptors import EmailDescriptor, PhoneDescriptor, PriorityDescriptor, TimeWindowDescriptor
 
 
 # Custom User Manager
@@ -48,9 +48,22 @@ class User(AbstractUser):
     time_window_start = models.DateTimeField(default=timezone.now)
     time_window_end = models.DateTimeField(default=timezone.now)
 
+    # Champ de base pour stocker la priorité de manière persistante. La valeur
+    # est synchronisée avec le descripteur ``priority`` au moment de la
+    # sauvegarde. Par défaut, une priorité faible est attribuée.
+    priority_db = models.CharField(max_length=10, default='faible', blank=True)
+
     # Descripteurs restants pour validation
     email_perso = EmailDescriptor()
     phone = PhoneDescriptor()
+
+    # Descripteur pour la priorité de l'utilisateur. Permet de valider et
+    # normaliser la priorité via ``PriorityDescriptor``.
+    priority = PriorityDescriptor()
+
+    # Descripteur pour la fenêtre temporelle (start, end). Lors de
+    # l'affectation, la valeur doit être un tuple (start_datetime, end_datetime).
+    time_window = TimeWindowDescriptor()
 
     # Relations ManyToMany pour groupes et permissions
     groups = models.ManyToManyField(
@@ -70,21 +83,37 @@ class User(AbstractUser):
     def __init__(self, *args, **kwargs):
         email_val = kwargs.pop('email_perso', None)
         phone_val = kwargs.pop('phone', None)
+        priority_val = kwargs.pop('priority', None)
+        time_window_val = kwargs.pop('time_window', None)
         super().__init__(*args, **kwargs)
 
         if email_val:
             self.email_perso = email_val
         if phone_val:
             self.phone = phone_val
+        if priority_val:
+            # Le descripteur ``priority`` s'assure que la valeur est valide
+            self.priority = priority_val
+        if time_window_val:
+            # Affecte la fenêtre temporelle si fournie lors de l'instanciation
+            self.time_window = time_window_val
 
     def save(self, *args, **kwargs):
         # Synchronisation des champs ORM avec les descripteurs
         self.email_perso_db = self.email_perso
         self.phone_db = self.phone
+        # Synchroniser la priorité et la plage horaire depuis les descripteurs
+        self.priority_db = self.priority
+        # Si une fenêtre temporelle a été définie via le descripteur,
+        # synchroniser les champs start/end pour persistance
+        if 'time_window' in self.__dict__:
+            tw = self.__dict__['time_window']
+            if isinstance(tw, tuple) and len(tw) == 2:
+                self.time_window_start, self.time_window_end = tw
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.username} ({self.email} / {self.email_perso})"
+        return f"{self.username} ({self.email} / {self.email_perso}) [prio={self.priority}]"
 
     class Meta:
         verbose_name = "Utilisateur"

@@ -122,3 +122,17 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'notifications.User'
+
+# ---------------------------
+# Authentification / Sessions
+# ---------------------------
+# Par défaut, Django redirige les requêtes non authentifiées vers
+# ``/accounts/login/``. Comme l'application fournit sa propre page de
+# connexion, on redéfinit les paramètres d'authentification pour utiliser
+# cette page dédiée. ``LOGIN_REDIRECT_URL`` permet de renvoyer
+# automatiquement l'utilisateur vers son tableau de bord après une
+# connexion réussie, et ``LOGOUT_REDIRECT_URL`` l'envoie vers la page de
+# connexion après déconnexion.
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/dashboard/'
+LOGOUT_REDIRECT_URL = '/login/'
