@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.swp
+
+# Django / projet web
+*.sqlite3          # Base de données SQLite locale
+db.sqlite3         # si tu l'utilises
+*.log              # fichiers logs
+media/              # fichiers uploadés
+staticfiles/        # si tu collectes les fichiers statiques
+*.pot               # fichiers traduction générés
+*.mo                # fichiers traduction compilés
+
+# Migrations locales
+*/migrations/*.pyc
+*/migrations/__pycache__/
+*/migrations/*.py[cod]
+!*/migrations/__init__.py
+
+# Virtualenv
+venv/
+env/
+.venv/
+.ENV/
+virt/
+Virt/
+
+# IDE / éditeur
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.iml
+
+# MacOS / Linux / Windows temporaires
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Secrets
+*.env
+.env.local
+.env.production
+.env.development
+
+# Node / frontend (si tu as React ou autre)
+node_modules/
+build/
+dist/
+npm-debug.log
+yarn-error.log

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Déclenchement d’Urgence</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 60px auto;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #1f2d3d;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 6px;
+            color: #1f2d3d;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #dcdfe6;
+            background: #fafafa;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #e53935;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #c62828;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #1f2d3d;
+            font-size: 14px;
+        }
+
+        /* Message Django */
+        .message-box {
+            background: #d1f7c4;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 5px solid #43a047;
+            color: #1b5e20;
+        }
+
+        .message-box.error {
+            background: #ffdde0;
+            border-left: 5px solid #d32f2f;
+            color: #7f0000;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Déclenchement d'Urgence</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message-box {% if message.tags %}{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST" id="broadcastForm">
+        {% csrf_token %}
+
+        <label for="emergency_type">Type d'urgence</label>
+
+        <select id="emergency_type" name="emergency_type" required>
+            <option value="epidemie">Épidémie</option>
+            <option value="incendie">Incendie</option>
+            <option value="innondation">Inondation</option>
+            <option value="securite">Sécurité</option>
+        </select>
+
+        <button type="submit">Déclencher</button>
+    </form>
+
+    <a class="back-link" href="{% url 'admin_dashboard' %}">← Retour au Dashboard Admin</a>
+
+</div>
+
+<script>
+    // Empêche strictement le double POST
+    const form = document.getElementById("broadcastForm");
+    form.addEventListener("submit", function() {
+        document.querySelector("button").disabled = true;
+    });
+</script>
+
+</body>
+</html>
