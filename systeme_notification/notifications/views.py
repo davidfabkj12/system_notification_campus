@@ -30,7 +30,7 @@ def user_dashboard(request):
         'unread_notifications': notifications.filter(created_at__gte=now - timedelta(days=1)).count(),
         'high_priority': notifications.filter(priority='haute').count(),
     }
-    return render(request, 'notifications/user_dashboard.html', context)
+    return HttpResponse(request, 'notifications/user_dashboard.html', context)
 
 
 @login_required
@@ -64,7 +64,7 @@ def admin_dashboard(request):
         'recent_notifications': recent_notifications,
         'daily_stats': json.dumps(daily_stats),
     }
-    return render(request, 'notifications/admin_dashboard.html', context)
+    return HttpResponse(request, 'notifications/admin_dashboard.html', context)
 
 
 @api_view(['GET'])
@@ -122,4 +122,4 @@ def broadcast_notifications(request):
         else:
             messages.error(request, "Type d'urgence inconnu")
         return redirect("broadcast_notifications")  
-    return render(request, "notifications/broadcast_notifications.html")
+    return HttpResponse(request, "notifications/broadcast_notifications.html")
