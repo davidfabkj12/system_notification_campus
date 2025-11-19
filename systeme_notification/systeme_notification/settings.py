@@ -18,7 +18,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*", "security-campus.up.railway.app"]
 
-
+CSRF_TRUSTED_ORIGINS = ["https://security-campus.up.railway.app"]
 # Application definition
 
 INSTALLED_APPS = [
