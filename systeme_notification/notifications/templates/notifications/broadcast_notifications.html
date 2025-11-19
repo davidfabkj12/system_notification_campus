@@ -2,85 +2,314 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Déclenchement d’Urgence</title>
-
+    <title>Déclenchement d'Urgence - Système de Notifications Campus</title>
     <style>
-        body {
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --danger: #e53935;
+            --danger-dark: #c62828;
+            --warning: #ff9800;
+            --success: #4caf50;
+            --light: #f5f7fb;
+            --dark: #1f2d3d;
+            --gray: #6c757d;
+            --gray-light: #dcdfe6;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.15);
+            --shadow-hover: 0 15px 40px rgba(0,0,0,0.25);
+            --radius: 16px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f7fb;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            line-height: 1.6;
         }
 
         .container {
-            max-width: 500px;
-            margin: 60px auto;
-            padding: 25px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+            max-width: 520px;
+            width: 100%;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            transition: var(--transition);
         }
 
-        h2 {
+        .container:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(135deg, var(--danger) 0%, var(--warning) 100%);
+        }
+
+        .header {
+            padding: 35px 35px 20px;
             text-align: center;
-            margin-bottom: 20px;
-            color: #1f2d3d;
+            background: var(--white);
+        }
+
+        .header h2 {
+            color: var(--dark);
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header-subtitle {
+            color: var(--gray);
+            font-size: 1em;
+            font-weight: 400;
+        }
+
+        .content {
+            padding: 0 35px 35px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
         }
 
         label {
-            font-weight: bold;
+            font-weight: 600;
             display: block;
-            margin-bottom: 6px;
-            color: #1f2d3d;
+            margin-bottom: 10px;
+            color: var(--dark);
+            font-size: 1em;
         }
 
         select {
             width: 100%;
-            padding: 12px;
+            padding: 14px 16px;
+            border: 2px solid var(--gray-light);
             border-radius: 8px;
-            border: 1px solid #dcdfe6;
-            background: #fafafa;
-            margin-bottom: 20px;
+            background: var(--white);
             font-size: 15px;
+            transition: var(--transition);
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23666' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 12px;
         }
 
-        button {
+        select:focus {
+            outline: none;
+            border-color: var(--danger);
+            box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.1);
+        }
+
+        select:hover {
+            border-color: #c5c5c5;
+        }
+
+        .btn {
             width: 100%;
-            padding: 14px;
-            background: #e53935;
-            color: white;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, var(--danger) 0%, var(--danger-dark) 100%);
+            color: var(--white);
             border: none;
             border-radius: 8px;
             font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            transition: 0.2s;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
         }
 
-        button:hover {
-            background: #c62828;
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(229, 57, 53, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn:disabled::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--white);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
         .back-link {
-            display: inline-block;
-            margin-top: 20px;
+            display: inline-flex;
+            align-items: center;
+            margin-top: 25px;
             text-decoration: none;
-            color: #1f2d3d;
-            font-size: 14px;
+            color: var(--primary);
+            font-weight: 500;
+            transition: var(--transition);
+            gap: 8px;
         }
 
-        /* Message Django */
+        .back-link:hover {
+            color: var(--secondary);
+            transform: translateX(-3px);
+        }
+
+        .back-link::before {
+            content: '←';
+            font-size: 1.1em;
+        }
+
+        /* Messages Django */
         .message-box {
-            background: #d1f7c4;
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            border-left: 5px solid #43a047;
-            color: #1b5e20;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--success);
+            background: #e8f5e8;
+            color: #2e7d32;
+            font-weight: 500;
+            animation: slideIn 0.5s ease-out;
         }
 
         .message-box.error {
-            background: #ffdde0;
-            border-left: 5px solid #d32f2f;
-            color: #7f0000;
+            border-left-color: var(--danger);
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .message-box.warning {
+            border-left-color: var(--warning);
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .message-box.info {
+            border-left-color: var(--primary);
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .emergency-icon {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .emergency-icon::before {
+            content: '🚨';
+            font-size: 3em;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .warning-text {
+            text-align: center;
+            color: var(--danger);
+            font-weight: 600;
+            margin: 20px 0;
+            padding: 15px;
+            background: #fff5f5;
+            border-radius: 8px;
+            border: 1px solid #ffcdd2;
+            animation: pulse 2s infinite;
+        }
+
+        /* Responsive */
+        @media (max-width: 576px) {
+            .container {
+                margin: 20px;
+            }
+
+            .header {
+                padding: 25px 25px 15px;
+            }
+
+            .content {
+                padding: 0 25px 25px;
+            }
+
+            .header h2 {
+                font-size: 1.6em;
+            }
+
+            select, .btn {
+                padding: 14px 16px;
+            }
+        }
+
+        /* Style pour les options de sélection */
+        option {
+            padding: 10px;
+            font-size: 15px;
+        }
+
+        option[value="epidemie"] {
+            background: #fff3e0;
+        }
+
+        option[value="incendie"] {
+            background: #ffebee;
+        }
+
+        option[value="innondation"] {
+            background: #e3f2fd;
+        }
+
+        option[value="securite"] {
+            background: #f3e5f5;
         }
     </style>
 </head>
@@ -88,42 +317,110 @@
 <body>
 
 <div class="container">
+    <div class="header">
+        <div class="emergency-icon"></div>
+        <h2>Déclenchement d'Urgence</h2>
+        <p class="header-subtitle">Système de Notifications Campus</p>
+    </div>
 
-    <h2>Déclenchement d'Urgence</h2>
+    <div class="content">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message-box {% if message.tags %}{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="message-box {% if message.tags %}{{ message.tags }}{% endif %}">
-                {{ message }}
+        <div class="warning-text">
+            ⚠️ Cette action enverra une notification à tous les utilisateurs
+        </div>
+
+        <form method="POST" id="broadcastForm">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="emergency_type">Type d'urgence</label>
+                <select id="emergency_type" name="emergency_type" required>
+                    <option value="epidemie">Épidémie</option>
+                    <option value="incendie">Incendie</option>
+                    <option value="innondation">Inondation</option>
+                    <option value="securite">Sécurité</option>
+                </select>
             </div>
-        {% endfor %}
-    {% endif %}
 
-    <form method="POST" id="broadcastForm">
-        {% csrf_token %}
+            <button type="submit" class="btn" id="submitBtn">
+                Déclencher l'urgence
+            </button>
+        </form>
 
-        <label for="emergency_type">Type d'urgence</label>
-
-        <select id="emergency_type" name="emergency_type" required>
-            <option value="epidemie">Épidémie</option>
-            <option value="incendie">Incendie</option>
-            <option value="innondation">Inondation</option>
-            <option value="securite">Sécurité</option>
-        </select>
-
-        <button type="submit">Déclencher</button>
-    </form>
-
-    <a class="back-link" href="{% url 'admin_dashboard' %}">← Retour au Dashboard Admin</a>
-
+        <a class="back-link" href="{% url 'admin_dashboard' %}">
+            Retour au Dashboard Admin
+        </a>
+    </div>
 </div>
 
 <script>
-    // Empêche strictement le double POST
+    // Empêche strictement le double POST avec améliorations
     const form = document.getElementById("broadcastForm");
-    form.addEventListener("submit", function() {
-        document.querySelector("button").disabled = true;
+    const submitBtn = document.getElementById("submitBtn");
+    const emergencySelect = document.getElementById("emergency_type");
+
+    form.addEventListener("submit", function(e) {
+        // Confirmation pour les actions critiques
+        const emergencyType = emergencySelect.options[emergencySelect.selectedIndex].text;
+        const confirmed = confirm(`Êtes-vous sûr de vouloir déclencher une alerte "${emergencyType}" ?\n\nCette notification sera envoyée à tous les utilisateurs.`);
+        
+        if (!confirmed) {
+            e.preventDefault();
+            return;
+        }
+
+        // Désactivation du bouton et affichage du statut de chargement
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Envoi en cours...';
+        
+        // Animation de secousse si validation échoue
+        if (!emergencySelect.value) {
+            e.preventDefault();
+            emergencySelect.style.animation = 'shake 0.5s';
+            setTimeout(() => {
+                emergencySelect.style.animation = '';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Déclencher l\'urgence';
+            }, 500);
+        }
     });
+
+    // Animation de secousse
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Focus sur la sélection au chargement
+    document.addEventListener('DOMContentLoaded', function() {
+        emergencySelect.focus();
+    });
+
+    // Changement de couleur en fonction du type d'urgence sélectionné
+    emergencySelect.addEventListener('change', function() {
+        const colors = {
+            'epidemie': '#fff3e0',
+            'incendie': '#ffebee', 
+            'innondation': '#e3f2fd',
+            'securite': '#f3e5f5'
+        };
+        this.style.backgroundColor = colors[this.value] || '#ffffff';
+    });
+
+    // Initialisation de la couleur de fond
+    emergencySelect.style.backgroundColor = '#ffffff';
 </script>
 
 </body>
