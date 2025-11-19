@@ -12,11 +12,32 @@
             box-sizing: border-box;
         }
         
+        :root {
+            --primary: #1e3c72;
+            --secondary: #2a5298;
+            --accent: #667eea;
+            --accent-dark: #764ba2;
+            --danger: #dc3545;
+            --info: #17a2b8;
+            --success: #28a745;
+            --warning: #ffc107;
+            --light: #f8f9fa;
+            --dark: #333;
+            --gray: #666;
+            --gray-light: #999;
+            --white: #fff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.15);
+            --shadow-hover: 0 15px 40px rgba(0,0,0,0.25);
+            --radius: 12px;
+            --transition: all 0.3s ease;
+        }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             min-height: 100vh;
             padding: 20px;
+            line-height: 1.6;
         }
         
         .container {
@@ -25,64 +46,138 @@
         }
         
         .header {
-            background: white;
+            background: var(--white);
             padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
             margin-bottom: 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
         }
         
         .header h1 {
-            color: #1e3c72;
+            color: var(--primary);
             font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 5px;
         }
         
-        .header-info {
-            text-align: right;
-            color: #666;
+        .header-subtitle {
+            color: var(--gray);
+            font-size: 1em;
+            font-weight: 400;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            color: var(--white);
+        }
+        
+        .btn-info {
+            background: var(--info);
+            color: var(--white);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: var(--white);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
         
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            gap: 25px;
             margin-bottom: 30px;
         }
         
         .stat-card {
-            background: white;
+            background: var(--white);
             padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            transition: transform 0.3s;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
         }
         
         .stat-card:hover {
             transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            opacity: 0.7;
         }
         
         .stat-card h3 {
-            color: #666;
+            color: var(--gray);
             font-size: 0.9em;
             text-transform: uppercase;
             margin-bottom: 15px;
             letter-spacing: 1px;
+            font-weight: 600;
         }
         
         .stat-card .number {
             font-size: 3em;
-            font-weight: bold;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            line-height: 1;
         }
         
         .stat-card .subtitle {
-            color: #999;
+            color: var(--gray-light);
             font-size: 0.85em;
             margin-top: 10px;
         }
@@ -95,16 +190,34 @@
         }
         
         .chart-card {
-            background: white;
+            background: var(--white);
             padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .chart-card:hover {
+            box-shadow: var(--shadow-hover);
         }
         
         .chart-card h2 {
-            color: #333;
+            color: var(--dark);
             margin-bottom: 20px;
             font-size: 1.3em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .chart-card h2::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            margin-right: 10px;
+            border-radius: 2px;
         }
         
         .tables-container {
@@ -114,109 +227,127 @@
         }
         
         .table-card {
-            background: white;
+            background: var(--white);
             padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .table-card:hover {
+            box-shadow: var(--shadow-hover);
         }
         
         .table-card h2 {
-            color: #333;
+            color: var(--dark);
             margin-bottom: 20px;
             font-size: 1.3em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .table-card h2::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            margin-right: 10px;
+            border-radius: 2px;
         }
         
         table {
             width: 100%;
             border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
         }
         
         thead {
-            background: #f8f9fa;
+            background: var(--light);
         }
         
         th {
             padding: 15px;
             text-align: left;
-            color: #666;
+            color: var(--gray);
             font-weight: 600;
             text-transform: uppercase;
             font-size: 0.85em;
             letter-spacing: 1px;
+            border-bottom: 2px solid #e9ecef;
         }
         
         td {
             padding: 15px;
             border-bottom: 1px solid #f0f0f0;
-            color: #333;
+            color: var(--dark);
         }
         
         tr:hover {
-            background: #f8f9fa;
+            background: var(--light);
         }
         
         .priority-badge {
-            padding: 5px 12px;
+            padding: 6px 14px;
             border-radius: 20px;
             font-size: 0.8em;
             font-weight: bold;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .priority-haute {
-            background: #dc3545;
-            color: white;
+            background: var(--danger);
+            color: var(--white);
         }
         
         .priority-moyenne {
-            background: #ffc107;
-            color: #333;
+            background: var(--warning);
+            color: var(--dark);
         }
         
         .priority-faible {
-            background: #28a745;
-            color: white;
+            background: var(--success);
+            color: var(--white);
         }
         
-        .refresh-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: 600;
-            transition: transform 0.3s;
-        }
-
-        /* Boutons supplémentaires dans l'en-tête */
-        .admin-btn,
-        .logout-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: 600;
-            margin-left: 10px;
-            transition: transform 0.3s, background 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .admin-btn {
-            background: #17a2b8;
-        }
-        .logout-btn:hover,
-        .admin-btn:hover {
-            transform: scale(1.05);
-            background: #c82333;
+        .logout-form {
+            display: inline;
         }
         
-        .refresh-btn:hover {
-            transform: scale(1.05);
+        @media (max-width: 1200px) {
+            .header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .header-actions {
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .charts-container,
+            .tables-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .logout-form {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -225,15 +356,15 @@
         <div class="header">
             <div>
                 <h1>Dashboard Administrateur</h1>
-                <p style="color: #999; margin-top: 5px;">Système de Notifications Campus</p>
+                <p class="header-subtitle">Système de Notifications Campus</p>
             </div>
-            <div class="header-info">
-                <a href="{% url 'admin:index' %}" class="admin-btn">Espace Admin Django</a>
-                <a href="{% url 'api-schema' %}" class="admin-btn">Schema de l'API</a>
-                <a href="{% url 'broadcast_notifications' %}" class="admin-btn">Diffuser Urgence Auto</a>
-                <form action="{% url 'logout' %}" method="post">
+            <div class="header-actions">
+                <a href="{% url 'admin:index' %}" class="btn btn-info">Espace Admin Django</a>
+                <a href="{% url 'api-schema' %}" class="btn btn-info">Schéma de l'API</a>
+                <a href="{% url 'broadcast_notifications' %}" class="btn btn-primary">Diffuser Urgence Auto</a>
+                <form action="{% url 'logout' %}" method="post" class="logout-form">
                     {% csrf_token %}
-                    <button class='logout-btn' type="submit">Se déconnecter</button>
+                    <button class="btn btn-danger" type="submit">Se déconnecter</button>
                 </form>
             </div>
         </div>
@@ -321,26 +452,6 @@
                 </table>
             </div>
         </div>
-
-        <!-- Formulaire d'envoi de notification à tous les utilisateurs -->
-        <!-- <div class="table-card" style="margin-top: 30px;">
-            <h2>Envoyer une notification à tous les utilisateurs</h2>
-            <form action="{% url 'broadcast_notifications' %}" method="post" style="margin-top: 15px;">
-                {% csrf_token %}
-                <div style="display: flex; flex-direction: column; gap: 15px;">
-                    <label for="broadcast-message" style="font-weight: 600; color: #333;">Message&nbsp;:</label>
-                    <textarea id="broadcast-message" name="message" rows="3" style="padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 1em; resize: vertical;"></textarea>
-                    <label for="broadcast-priority" style="font-weight: 600; color: #333;">Priorité&nbsp;:</label>
-                    <select id="broadcast-priority" name="priority" style="padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 1em;">
-                        <option value="faible">Faible</option>
-                        <option value="moyenne">Moyenne</option>
-                        <option value="haute">Haute</option>
-                        <option value="urgente">Urgente</option>
-                    </select>
-                    <button type="submit" class="refresh-btn" style="align-self: flex-start;">Envoyer</button>
-                </div>
-            </form>
-        </div> -->
     </div>
     
     <script>
@@ -362,7 +473,9 @@
                         '#dc3545',
                         '#ffc107',
                         '#28a745'
-                    ]
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 15
                 }]
             },
             options: {
@@ -370,9 +483,17 @@
                 maintainAspectRatio: true,
                 plugins: {
                     legend: {
-                        position: 'bottom'
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true,
+                            font: {
+                                size: 12
+                            }
+                        }
                     }
-                }
+                },
+                cutout: '60%'
             }
         });
         
@@ -388,9 +509,11 @@
                 datasets: [{
                     label: 'Notifications',
                     data: dailyData,
-                    backgroundColor: 'rgba(102, 126, 234, 0.6)',
+                    backgroundColor: 'rgba(102, 126, 234, 0.7)',
                     borderColor: 'rgba(102, 126, 234, 1)',
-                    borderWidth: 2
+                    borderWidth: 2,
+                    borderRadius: 6,
+                    hoverBackgroundColor: 'rgba(102, 126, 234, 0.9)'
                 }]
             },
             options: {
@@ -398,7 +521,15 @@
                 maintainAspectRatio: true,
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
                     }
                 },
                 plugins: {
