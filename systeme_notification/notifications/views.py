@@ -19,10 +19,8 @@ from .models import Notification
 
 User = get_user_model()
 
-
-# Vue de santé simple pour les tests / healthcheck
 def health(request):
-    return HttpResponse("ok")
+    return HttpResponse("ok", content_type="text/plain")
 
 
 @login_required
