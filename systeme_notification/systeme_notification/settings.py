@@ -11,10 +11,10 @@ EVACUATION_API_BASE = "https://security-campus.up.railway.app/api/evacuation/"
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('p7we7Cij0fW1UabJLi3rCFQvK8B67bYZE3ER6ARPxYfMjxyw2TTKdhnWOwwu6MRa7z', 'django-insecure-aq^gq8!)ot29+e*#m--q2*8%f+6rsfo@sj&575vfpjftbvc5--')
+SECRET_KEY = ('p7we7Cij0fW1UabJLi3rCFQvK8B67bYZE3ER6ARPxYfMjxyw2TTKdhnWOwwu6MRa7z', 'django-insecure-aq^gq8!)ot29+e*#m--q2*8%f+6rsfo@sj&575vfpjftbvc5--')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+DEBUG = True
 
 ALLOWED_HOSTS = ["*", "security-campus.up.railway.app"]
 
@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'systeme_notification.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 # Configuration pour PostgreSQL (production) ou SQLite (développement)
-DATABASE_URL = os.environ.get('postgresql://postgres:JiIyjHbghDgSGfqlmEufBXxdZPockKDZ@postgres.railway.internal:5432/railway')
+DATABASE_URL = ('postgresql://postgres:JiIyjHbghDgSGfqlmEufBXxdZPockKDZ@postgres.railway.internal:5432/railway')
 
 if DATABASE_URL:
     # Production: utiliser PostgreSQL
