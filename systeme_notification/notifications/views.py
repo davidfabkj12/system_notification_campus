@@ -85,7 +85,7 @@ def stats_api(request):
 
 
 
-API_BASE = "http://127.0.0.1:8000/api/evacuation/"
+API_BASE = "/api/evacuation/"
 
 class CustomLoginView(LoginView):
     template_name = 'notifications/login.html'
