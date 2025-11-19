@@ -14,7 +14,7 @@ EVACUATION_API_BASE = "https://security-campus.up.railway.app/api/evacuation/"
 SECRET_KEY = os.environ.get('p7we7Cij0fW1UabJLi3rCFQvK8B67bYZE3ER6ARPxYfMjxyw2TTKdhnWOwwu6MRa7z', 'django-insecure-aq^gq8!)ot29+e*#m--q2*8%f+6rsfo@sj&575vfpjftbvc5--')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*", "security-campus.up.railway.app"]
 
