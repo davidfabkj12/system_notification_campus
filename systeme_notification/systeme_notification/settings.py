@@ -15,7 +15,7 @@ SECRET_KEY = os.environ.get('p7we7Cij0fW1UabJLi3rCFQvK8B67bYZE3ER6ARPxYfMjxyw2TT
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ["security-campus.up.railway.app"]
+ALLOWED_HOSTS = ["*", "security-campus.up.railway.app"]
 
 
 # Application definition
