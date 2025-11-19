@@ -41,4 +41,4 @@ USER django
 EXPOSE 8000
 
 # Commande de démarrage
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "systeme_notification.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:$PORT", "--workers", "3", "systeme_notification.wsgi:application"]
