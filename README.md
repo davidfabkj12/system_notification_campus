@@ -18,9 +18,6 @@ systeme_notification/                  # Projet Django
     ├── api.py                           # ViewSets / APIViews pour DRF
     ├── urls.py                          # Routes API
     └── tests.py                         # Tests unitaires pour tous les concepts
-<<<<<<< Updated upstream
-=======
-
 ---
 
 ## 🌐 URLs Disponibles
@@ -79,13 +76,6 @@ python create_demo_data.py
 python manage.py runserver
 ```
 
----
-
-## 📚 Documentation
-
-- **[QUICKSTART.md](QUICKSTART.md)** - Guide de démarrage rapide
-- **[DASHBOARD_README.md](DASHBOARD_README.md)** - Documentation complète des dashboards
-- **[SETUP_SUMMARY.md](SETUP_SUMMARY.md)** - Résumé de l'installation
 
 ---
 
