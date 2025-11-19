@@ -21,6 +21,9 @@ COPY requirements.txt /app/
 # Installer les dépendances Python
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
+    
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copier le projet
 COPY systeme_notification /app/
