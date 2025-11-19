@@ -40,6 +40,4 @@ RUN useradd -m -u 1000 django && \
 
 USER django
 
-EXPOSE 8000  # optionnel, juste pour la doc
-
 CMD ["sh", "-c", "gunicorn systeme_notification.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 3"]
