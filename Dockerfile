@@ -40,8 +40,8 @@ RUN useradd -m -u 1000 django && \
 
 USER django
 
-# Exposer le port
+# Exposer le port interne du container
 EXPOSE 8000
 
-# Commande de démarrage
-CMD gunicorn --bind 0.0.0.0:$PORT --workers 3 systeme_notification.wsgi:application
+# Commande de démarrage (pas de $PORT)
+CMD gunicorn systeme_notification.wsgi:application --bind 0.0.0.0:8000 --workers 3
