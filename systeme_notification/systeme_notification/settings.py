@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'systeme_notification.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 # Configuration pour PostgreSQL (production) ou SQLite (développement)
-DATABASE_URL = os.environ.get('DATABASE_URL')
+DATABASE_URL = os.environ.get('postgresql://postgres:JiIyjHbghDgSGfqlmEufBXxdZPockKDZ@postgres.railway.internal:5432/railway')
 
 if DATABASE_URL:
     # Production: utiliser PostgreSQL
