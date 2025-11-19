@@ -11,11 +11,30 @@
             box-sizing: border-box;
         }
         
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --success: #28a745;
+            --info: #17a2b8;
+            --light: #f8f9fa;
+            --dark: #333;
+            --gray: #666;
+            --gray-light: #999;
+            --white: #fff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.15);
+            --shadow-hover: 0 15px 40px rgba(0,0,0,0.25);
+            --radius: 12px;
+            --transition: all 0.3s ease;
+        }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             min-height: 100vh;
             padding: 20px;
+            line-height: 1.6;
         }
         
         .container {
@@ -24,62 +43,153 @@
         }
         
         .header {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            background: var(--white);
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
             margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
         }
         
         .header h1 {
-            color: #667eea;
+            color: var(--primary);
             font-size: 2em;
-            margin-bottom: 10px;
+            font-weight: 700;
+            margin-bottom: 15px;
         }
         
         .user-info {
-            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .user-details {
+            color: var(--gray);
             font-size: 1.1em;
+            font-weight: 500;
+        }
+        
+        .user-details strong {
+            color: var(--dark);
+        }
+        
+        .logout-form {
+            display: inline;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: var(--white);
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
         }
         
         .stats-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            gap: 25px;
             margin-bottom: 30px;
         }
         
         .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background: var(--white);
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
             text-align: center;
-            transition: transform 0.3s;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
         }
         
         .stat-card:hover {
             transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            opacity: 0.7;
         }
         
         .stat-card h3 {
-            color: #666;
+            color: var(--gray);
             font-size: 0.9em;
             text-transform: uppercase;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            font-weight: 600;
         }
         
         .stat-card .number {
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #667eea;
+            font-size: 2.8em;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+            margin: 10px 0;
         }
         
         .notifications-container {
-            background: white;
+            background: var(--white);
             padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .notifications-container:hover {
+            box-shadow: var(--shadow-hover);
         }
         
         .notifications-header {
@@ -87,37 +197,53 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--light);
         }
         
         .notifications-header h2 {
-            color: #333;
+            color: var(--dark);
             font-size: 1.5em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
         }
         
-        .refresh-btn {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background 0.3s;
+        .notifications-header h2::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            margin-right: 12px;
+            border-radius: 2px;
         }
         
-        .refresh-btn:hover {
-            background: #5568d3;
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
         }
         
         .notification-item {
-            background: #f8f9fa;
+            background: var(--light);
             padding: 20px;
             margin-bottom: 15px;
             border-radius: 10px;
-            border-left: 4px solid #667eea;
-            transition: all 0.3s;
+            border-left: 4px solid var(--primary);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .notification-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: inherit;
         }
         
         .notification-item:hover {
@@ -126,17 +252,17 @@
         }
         
         .notification-item.priority-haute {
-            border-left-color: #dc3545;
+            border-left-color: var(--danger);
             background: #ffe6e6;
         }
         
         .notification-item.priority-moyenne {
-            border-left-color: #ffc107;
+            border-left-color: var(--warning);
             background: #fff8e1;
         }
         
         .notification-item.priority-faible {
-            border-left-color: #28a745;
+            border-left-color: var(--success);
             background: #e8f5e9;
         }
         
@@ -144,71 +270,151 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         
         .notification-priority {
             display: inline-block;
-            padding: 5px 12px;
+            padding: 6px 14px;
             border-radius: 20px;
             font-size: 0.85em;
             font-weight: bold;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .priority-haute {
-            background: #dc3545;
-            color: white;
+            background: var(--danger);
+            color: var(--white);
         }
         
         .priority-moyenne {
-            background: #ffc107;
-            color: #333;
+            background: var(--warning);
+            color: var(--dark);
         }
         
         .priority-faible {
-            background: #28a745;
-            color: white;
+            background: var(--success);
+            color: var(--white);
         }
         
         .notification-date {
-            color: #999;
+            color: var(--gray-light);
             font-size: 0.9em;
+            font-weight: 500;
         }
         
         .notification-message {
-            color: #333;
+            color: var(--dark);
             line-height: 1.6;
-            margin-top: 10px;
+            font-size: 1em;
         }
         
         .no-notifications {
             text-align: center;
-            padding: 50px;
-            color: #999;
+            padding: 60px 20px;
+            color: var(--gray-light);
             font-size: 1.2em;
+            font-weight: 500;
         }
         
-        .logout-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1em;
-            margin-left: 10px;
-            transition: background 0.3s;
-        }
-        
-        .logout-btn:hover {
-            background: #c82333;
+        .no-notifications::before {
+            content: '📭';
+            font-size: 3em;
+            display: block;
+            margin-bottom: 15px;
+            opacity: 0.5;
         }
         
         .loading {
             text-align: center;
-            padding: 20px;
-            color: #667eea;
+            padding: 40px;
+            color: var(--primary);
+            font-size: 1.1em;
+        }
+        
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary);
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                padding: 25px 20px;
+            }
+            
+            .user-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .logout-form {
+                width: 100%;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .notifications-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            
+            .notification-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .stats-cards {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.7em;
+            }
+            
+            .stat-card {
+                padding: 25px 20px;
+            }
+            
+            .stat-card .number {
+                font-size: 2.3em;
+            }
+            
+            .notifications-container {
+                padding: 25px 20px;
+            }
         }
     </style>
 </head>
@@ -217,11 +423,12 @@
         <div class="header">
             <h1>Dashboard Utilisateur</h1>
             <div class="user-info">
-                <strong>Bienvenue, {{ user.username }}!</strong> | {{ user.email }}
-                <!-- Bouton de déconnexion accessible depuis le tableau de bord utilisateur -->
-                <form action="{% url 'logout' %}" method="post">
+                <div class="user-details">
+                    <strong>Bienvenue, {{ user.username }}!</strong> | {{ user.email }}
+                </div>
+                <form action="{% url 'logout' %}" method="post" class="logout-form">
                     {% csrf_token %}
-                    <button class="logout-btn" type="submit">Se déconnecter</button>
+                    <button class="btn btn-danger" type="submit">Se déconnecter</button>
                 </form>
             </div>
         </div>
@@ -244,7 +451,8 @@
         <div class="notifications-container">
             <div class="notifications-header">
                 <h2>Mes Notifications</h2>
-                <div>
+                <div class="header-actions">
+                    <!-- Espace pour actions supplémentaires si nécessaire -->
                 </div>
             </div>
             
@@ -272,7 +480,23 @@
     
     <script>
         // Auto-refresh every 30 seconds
-        setTimeout(() => location.reload(), 30000);
+        setTimeout(() => {
+            location.reload();
+        }, 30000);
+        
+        // Ajout d'un effet de fade-in au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            const items = document.querySelectorAll('.notification-item');
+            items.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-20px)';
+                setTimeout(() => {
+                    item.style.transition = 'all 0.5s ease';
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateX(0)';
+                }, index * 100);
+            });
+        });
     </script>
 </body>
 </html>
