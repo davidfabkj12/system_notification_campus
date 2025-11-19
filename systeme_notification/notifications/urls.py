@@ -23,7 +23,6 @@ router = DefaultRouter()
 router.register(r'notifications', NotificationViewSet)
 
 urlpatterns = [
-    path("", health, name="health"),
     path('', lambda request: redirect('dashboard/'), name='home'),
     path('login/', CustomLoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page=reverse_lazy('login')), name='logout'),
