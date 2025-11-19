@@ -3,78 +3,287 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Connexion - Notifications Campus</title>
+    <title>Connexion - Système de Notifications Campus</title>
     <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --success: #28a745;
+            --light: #f8f9fa;
+            --dark: #333;
+            --gray: #666;
+            --gray-light: #999;
+            --white: #fff;
+            --shadow: 0 15px 35px rgba(0,0,0,0.2);
+            --shadow-hover: 0 20px 45px rgba(0,0,0,0.3);
+            --radius: 16px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             margin: 0;
+            padding: 20px;
+            line-height: 1.6;
         }
+
         .login-container {
-            background: #fff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            width: 400px;
+            background: var(--white);
+            padding: 50px 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
         }
-        h1 {
+
+        .login-container:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .login-header {
             text-align: center;
-            margin-bottom: 30px;
-            color: #667eea;
+            margin-bottom: 40px;
         }
+
+        .login-header h1 {
+            color: var(--primary);
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .login-subtitle {
+            color: var(--gray);
+            font-size: 1em;
+            font-weight: 400;
+        }
+
         form {
             display: flex;
             flex-direction: column;
+            gap: 20px;
         }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
         label {
-            margin-bottom: 5px;
-            color: #555;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 0.95em;
         }
-        input[type="text"], input[type="password"] {
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
+
+        input[type="text"], 
+        input[type="password"] {
+            padding: 14px 16px;
+            border: 2px solid #e9ecef;
             border-radius: 8px;
             font-size: 1em;
+            transition: var(--transition);
+            background: var(--light);
         }
-        button {
-            padding: 12px;
-            background: #667eea;
-            color: #fff;
+
+        input[type="text"]:focus, 
+        input[type="password"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        input[type="text"]:hover, 
+        input[type="password"]:hover {
+            border-color: #c5cae9;
+        }
+
+        .btn {
+            padding: 14px 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-size: 1em;
-            transition: background 0.3s;
+            font-weight: 600;
+            transition: var(--transition);
+            margin-top: 10px;
         }
-        button:hover {
-            background: #5568d3;
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
         }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
         .errorlist {
-            color: #dc3545;
-            margin-bottom: 10px;
+            color: var(--danger);
+            margin-bottom: 15px;
             list-style: none;
-            padding-left: 0;
+            padding: 15px;
+            background: #ffe6e6;
+            border: 1px solid #ffcccc;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 500;
         }
+
+        .errorlist li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .errorlist li::before {
+            content: '⚠️';
+            font-size: 0.9em;
+        }
+
         .signup-link {
             text-align: center;
-            margin-top: 15px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
         }
+
+        .signup-link p {
+            color: var(--gray);
+            margin-bottom: 10px;
+        }
+
         .signup-link a {
-            color: #667eea;
+            color: var(--primary);
             text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .signup-link a:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 25px;
+            color: var(--gray-light);
+            font-size: 0.85em;
+        }
+
+        /* Animation d'entrée */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-container {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 40px 25px;
+                margin: 10px;
+            }
+
+            .login-header h1 {
+                font-size: 1.8em;
+            }
+
+            input[type="text"], 
+            input[type="password"] {
+                padding: 12px 14px;
+            }
+
+            .btn {
+                padding: 12px 18px;
+            }
+        }
+
+        /* Style pour les champs avec erreurs */
+        input.error {
+            border-color: var(--danger);
+            background: #fff5f5;
+        }
+
+        /* Loading state */
+        .btn.loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--white);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <h1>Connexion</h1>
+        <div class="login-header">
+            <h1>Connexion</h1>
+            <p class="login-subtitle">Système de Notifications Campus</p>
+        </div>
+        
         <form method="post">
             {% csrf_token %}
+            
             {% if form.non_field_errors %}
             <ul class="errorlist">
                 {% for error in form.non_field_errors %}
@@ -82,13 +291,77 @@
                 {% endfor %}
             </ul>
             {% endif %}
-            <label for="id_username">Nom d'utilisateur</label>
-            {{ form.username }}
-            <label for="id_password">Mot de passe</label>
-            {{ form.password }}
-            <button type="submit">Se connecter</button>
+
+            <div class="form-group">
+                <label for="id_username">Nom d'utilisateur</label>
+                {{ form.username }}
+            </div>
+
+            <div class="form-group">
+                <label for="id_password">Mot de passe</label>
+                {{ form.password }}
+            </div>
+
+            <button type="submit" class="btn">Se connecter</button>
         </form>
-        
+
+        <div class="signup-link">
+            <p>Nouveau sur la plateforme ?</p>
+            <a href="#">Créer un compte</a>
+        </div>
+
+        <div class="form-footer">
+            © 2024 Système de Notifications Campus
+        </div>
     </div>
+
+    <script>
+        // Ajout d'interactivité aux champs de formulaire
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('input[type="text"], input[type="password"]');
+            
+            inputs.forEach(input => {
+                // Ajout de placeholder améliorés
+                if (input.type === 'text' && !input.placeholder) {
+                    input.placeholder = 'Entrez votre nom d\'utilisateur';
+                }
+                if (input.type === 'password' && !input.placeholder) {
+                    input.placeholder = 'Entrez votre mot de passe';
+                }
+
+                // Gestion des erreurs visuelles
+                input.addEventListener('blur', function() {
+                    if (!this.value.trim()) {
+                        this.classList.add('error');
+                    } else {
+                        this.classList.remove('error');
+                    }
+                });
+
+                // Animation au focus
+                input.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'translateY(-2px)';
+                });
+
+                input.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Animation du bouton de soumission
+            const form = document.querySelector('form');
+            const submitBtn = document.querySelector('.btn');
+
+            form.addEventListener('submit', function() {
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
+            });
+
+            // Effet de focus automatique sur le premier champ
+            if (inputs.length > 0) {
+                inputs[0].focus();
+            }
+        });
+    </script>
 </body>
 </html>
