@@ -38,6 +38,8 @@ RUN python manage.py collectstatic --noinput --clear || true
 RUN useradd -m -u 1000 django && \
     chown -R django:django /app
 
-USER django
+# Expose le port interne (optionnel, pour la doc)
+EXPOSE 8000
 
-CMD ["sh", "-c", "gunicorn systeme_notification.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 3"]
+# Commande de démarrage
+CMD ["sh", "-c", "gunicorn systeme_notification.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 3"]
